@@ -8,11 +8,14 @@ export class UserEntity implements IUser {
 	passwordHash: string;
 	role: UserRole;
 
-	constructor(user: IUser) {
+	constructor(user: IUser | Omit<IUser, 'passwordHash'>) {
 		this._id = user._id;
 		this.name = user.name;
 		this.email = user.email;
 		this.role = user.role;
+		if ('passwordHash' in user) {
+			this.passwordHash = user.passwordHash;
+		}
 	}
 
 	public async setPassword(password: string): Promise<this> {
