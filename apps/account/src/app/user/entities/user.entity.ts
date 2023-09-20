@@ -29,4 +29,14 @@ export class UserEntity implements IUser {
 	public validatePassword(password: string): Promise<boolean> {
 		return compare(password, this.passwordHash);
 	}
+
+	public setName(name: string): this {
+		this.name = name;
+		return this;
+	}
+	
+	public setEmail(email: string): this {
+		this.email = email;
+		return this;
+	}
 }

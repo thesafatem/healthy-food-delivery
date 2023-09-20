@@ -2,6 +2,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../models/user.model';
 import { Model } from 'mongoose';
 import { UserEntity } from '../entities/user.entity';
+import { IUser } from '@healthy-food-delivery/interfaces';
 
 export class UserRepository {
 	constructor(
@@ -23,5 +24,9 @@ export class UserRepository {
 
 	async deleteUserByEmail(email: string): Promise<void> {
 		this.userModel.deleteOne({ email }).exec();
+	}
+
+	async updateUserById({ _id, ...rest }: UserEntity): Promise<User> {
+		return this.userModel.findByIdAndUpdate(_id, rest).exec();
 	}
 }
