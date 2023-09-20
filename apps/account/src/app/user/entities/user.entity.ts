@@ -1,4 +1,4 @@
-import { IUser, UserRole } from '@healthy-food-delivery/interfaces';
+import { IUser, IUserCourse, UserRole } from '@healthy-food-delivery/interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
 
 export class UserEntity implements IUser {
@@ -7,12 +7,14 @@ export class UserEntity implements IUser {
 	email: string;
 	passwordHash: string;
 	role: UserRole;
+	courses?: IUserCourse[];
 
 	constructor(user: IUser | Omit<IUser, 'passwordHash'>) {
 		this._id = user._id;
 		this.name = user.name;
 		this.email = user.email;
 		this.role = user.role;
+		this.courses = user.courses;
 		if ('passwordHash' in user) {
 			this.passwordHash = user.passwordHash;
 		}
