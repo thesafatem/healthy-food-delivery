@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@healthy-food-delivery/contracts": ["libs/contracts/src/index.ts"],
       "@healthy-food-delivery/interfaces": ["libs/interfaces/src/index.ts"]
     }
   },

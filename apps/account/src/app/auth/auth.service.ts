@@ -4,7 +4,7 @@ import { UserEntity } from '../user/entities/user.entity';
 import { UserRole } from '@healthy-food-delivery/interfaces';
 import { User } from '../user/models/user.model';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterDto } from './dto/register.dto';
+import { AccountRegister } from '@healthy-food-delivery/contracts';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,7 @@ export class AuthService {
 		private readonly jwtService: JwtService
 	) { }
 
-	async register({ email, password, name }: RegisterDto): Promise<User> {
+	async register({ email, password, name }: AccountRegister.Request): Promise<User> {
 		const oldUser = await this.userRepository.findUserByEmail(email);
 		if (oldUser) {
 			throw new Error('User is already exists');
