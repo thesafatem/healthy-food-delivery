@@ -1,4 +1,4 @@
-import { IUser, IUserCourse, UserRole } from '@healthy-food-delivery/interfaces';
+import { IUser, IUserCourse, PurchaseState, UserRole } from '@healthy-food-delivery/interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
 
 export class UserEntity implements IUser {
@@ -38,5 +38,29 @@ export class UserEntity implements IUser {
 	public setEmail(email: string): this {
 		this.email = email;
 		return this;
+	}
+
+	public addCourse(courseId: string) {
+		const isExist = this.courses.find(c => c.courseId === courseId);
+		if (isExist) {
+			throw new Error('Курс уже существует!');
+		}
+		this.courses.push({
+			courseId: courseId,
+			purchaseState: PurchaseState.Started
+		});
+	}
+
+	public deleteCourse(courseId: string) {
+		this.courses = this.courses.filter(c => c.courseId != courseId);
+	}
+
+	public updateCoursePurchaseState(courseId: string, state: PurchaseState) {
+		this.courses = this.courses.map(c => {
+			if (c.courseId == courseId) {
+				c.purchaseState = state;
+			}
+			return c;
+		});
 	}
 }
