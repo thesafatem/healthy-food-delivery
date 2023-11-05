@@ -34,7 +34,7 @@ export class UserEntity implements IUser {
 		this.name = name;
 		return this;
 	}
-	
+
 	public setEmail(email: string): this {
 		this.email = email;
 		return this;
@@ -55,7 +55,19 @@ export class UserEntity implements IUser {
 		this.courses = this.courses.filter(c => c.courseId != courseId);
 	}
 
-	public updateCoursePurchaseState(courseId: string, state: PurchaseState) {
+	public setCoursePurchaseState(courseId: string, state: PurchaseState) {
+		const isExist = this.courses.find(c => c.courseId == courseId);
+		if (!isExist) {
+			this.courses.push({
+				courseId,
+				purchaseState: state
+			});
+			return this;
+		}
+		if (state == PurchaseState.Cancelled) {
+			this.courses = this.courses.filter(c => c.courseId !== courseId);
+			return this;
+		}
 		this.courses = this.courses.map(c => {
 			if (c.courseId == courseId) {
 				c.purchaseState = state;

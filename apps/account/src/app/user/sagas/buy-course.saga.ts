@@ -1,34 +1,37 @@
 import { RMQService } from "nestjs-rmq";
 import { UserEntity } from "../entities/user.entity";
 import { PurchaseState } from "@healthy-food-delivery/interfaces";
-import { BuyCourseSagaStateStarted } from "./buy-course.steps";
+import { BuyCourseSagaCancelled, BuyCourseSagaStateProcess, BuyCourseSagaStatePurchased, BuyCourseSagaStateStarted } from "./buy-course.steps";
 
 export class BuyCourseSaga {
-    private state: any;
+	private state: any;
 
-    constructor(
-        public user: UserEntity, 
-        public courseId: string,
-        public rmqService: RMQService
-    ) { }
+	constructor(
+		public user: UserEntity,
+		public courseId: string,
+		public rmqService: RMQService
+	) { }
 
-    public getState() {
-        return this.state;
-    }
+	public getState() {
+		return this.state;
+	}
 
-    public setState(state: PurchaseState, courseId: string) {
-        switch(state) {
-            case PurchaseState.Started:
-                this.state = new BuyCourseSagaStateStarted();
-                break;
-            case PurchaseState.WaitingForPayment:
-                break;
-            case PurchaseState.Purchased:
-                break;
-            case PurchaseState.Cancelled:
-                break;
-        }
-        this.state.setContext(this);
-        this.user.updateCoursePurchaseState(courseId, state);
-    }
+	public setState(state: PurchaseState, courseId: string) {
+		switch (state) {
+			case PurchaseState.Started:
+				this.state = new BuyCourseSagaStateStarted();
+				break;
+			case PurchaseState.WaitingForPayment:
+				this.state = new BuyCourseSagaStateProcess();
+				break;
+			case PurchaseState.Purchased:
+				this.state = new BuyCourseSagaStatePurchased();
+				break;
+			case PurchaseState.Cancelled:
+				this.state = new BuyCourseSagaCancelled();
+				break;
+		}
+		this.state.setContext(this);
+		this.user.setCoursePurchaseState(courseId, state);
+	}
 }
