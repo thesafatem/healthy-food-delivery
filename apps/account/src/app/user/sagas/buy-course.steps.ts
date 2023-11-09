@@ -48,7 +48,7 @@ export class BuyCourseSagaStateProcess extends BuyCourseSagaState {
 				status
 			};
 		}
-		if (status !== 'success') {
+		if (status === 'success') {
 			return {
 				user: this.saga.user,
 				status
